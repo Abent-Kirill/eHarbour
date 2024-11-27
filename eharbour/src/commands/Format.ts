@@ -8,7 +8,6 @@ import { IMetaContext } from '../types/IMetaContext';
 import { ISpaceCorrectorInfo } from '../types/ISpaceCorrectorInfo';
 import * as Line from '../types/Line';
 import { LineTypes } from '../types/LineTypes';
-import * as SelectionPosition from '../types/SelectionPosition';
 import { TypeBlockCode } from '../types/TypeBlockCode';
 
 const FullNames = new Map<string, string>([
@@ -44,10 +43,17 @@ export function registerFormatCommand(
 				);
 				return;
 			}
+			const selection = editor.selection;
 
-			const text = document.getText();
-			const textRange = getDocumentRange(document);
-			const selectedPosition = getSelectionPosition(editor.selection);
+			// Если выделение пустое, используем текущую строку как start и end
+			const selectedCode: vscode.Selection = selection.isEmpty
+				? new vscode.Selection(
+						new vscode.Position(selection.start.line, 0),
+						new vscode.Position(selection.end.line, 0),
+				  )
+				: selection; // Если выделение есть, просто используем его
+
+			const text = document.getText(selectedCode);
 
 			try {
 				vscode.window.showInformationMessage(
@@ -57,7 +63,6 @@ export function registerFormatCommand(
 				const formattedText = await getFormattedDoc(
 					text,
 					formatterConfiguration,
-					selectedPosition,
 					vscodeOnigurumaLibPromise,
 				);
 				const edit = new vscode.WorkspaceEdit();
@@ -65,7 +70,7 @@ export function registerFormatCommand(
 				// Перенести в функцию формата
 				if (text !== formattedText) {
 					await editor.edit((editBuilder) => {
-						editBuilder.replace(textRange, formattedText);
+						editBuilder.replace(editor.selection, formattedText);
 					});
 					await vscode.workspace.applyEdit(edit);
 					vscode.window.showInformationMessage('Код успешно отформатирован.');
@@ -87,24 +92,6 @@ export function registerFormatCommand(
 
 function isSupportedFile(fileName: string): boolean {
 	return path.extname(fileName).toLowerCase() === '.prg';
-}
-
-function getDocumentRange(document: vscode.TextDocument): vscode.Range {
-	return new vscode.Range(
-		document.lineAt(0).range.start,
-		document.lineAt(document.lineCount - 1).range.end,
-	);
-}
-
-function getSelectionPosition(
-	selection: vscode.Selection,
-): SelectionPosition.SelectionPosition | null {
-	return selection.isEmpty
-		? null
-		: {
-				startRow: selection.start.line,
-				endRow: selection.end.line + 1,
-		  };
 }
 
 function parseMemVarsFrom(lines: string[]): string[][] {
@@ -170,7 +157,6 @@ function parseAndRestoreMemvars(input: string): string {
 function getFormattedDoc(
 	code: string,
 	harbour: IFormatterConfiguration,
-	selectionPos: SelectionPosition.SelectionPosition | null,
 	vscodeOnigurumaLibPromise: Promise<vsTextmate.IOnigLib>,
 ): Promise<string> {
 	const registry = new vsTextmate.Registry({
@@ -240,13 +226,6 @@ function getFormattedDoc(
 						const specLineTypes: Line.Line[] = [];
 						let hasSpecLineTypes = false;
 						let startRow, endRow: number;
-						if (selectionPos === null) {
-							startRow = 0;
-							endRow = lines.length;
-						} else {
-							startRow = selectionPos.startRow;
-							endRow = selectionPos.endRow;
-						}
 
 						let currentState = globalState;
 						let ruleStack = vsTextmate.INITIAL;
@@ -264,10 +243,6 @@ function getFormattedDoc(
 								continue;
 							}
 							const lineTokens = grammar.tokenizeLine(line, ruleStack);
-
-							if (i < startRow || i >= endRow) {
-								continue;
-							}
 							const backIndent = false;
 							let spaceCount: number;
 							if (backIndent) {

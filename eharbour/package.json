@@ -7,7 +7,7 @@
 	"version": "0.0.19",
 	"pricing": "Free",
 	"engines": {
-		"vscode": "^1.84.0"
+		"vscode": "^1.95.0"
 	},
 	"sponsor": {
 		"url": "https://tracker.vitaexpress.ru/retail-solutions/clipper-kassa"
@@ -18,8 +18,7 @@
 	"categories": [
 		"Other"
 	],
-	"activationEvents": [
-	],
+	"activationEvents": [],
 	"main": "./out/extension.js",
 	"contributes": {
 		"configuration": {
@@ -32,10 +31,19 @@
 				}
 			}
 		},
+		"keybindings": [
+			{
+				"command": "eHarbour.format",
+				"key": "ctrl+alt+f",
+				"when": "editorTextFocus"
+			}
+		],
 		"commands": [
 			{
 				"command": "eHarbour.format",
-				"title": "Harbour format"
+				"title": "Harbour format",
+				"category": "format",
+				"shortTitle": "HFormat"
 			}
 		]
 	},
@@ -46,8 +54,8 @@
 		"pretest": "npm run compile && npm run lint",
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js",
-		"copy_wasm": "xcopy /e/h/y/q \"node_modules/vscode-oniguruma-wasm/release\" \"out/oniguruma/*\"",
-		"copy_files": "xcopy /e/h/y/q \"syntaxes\" \"out/syntaxes/*\""
+		"copy_wasm": "xcopy /e/h/y/q \"node_modules/vscode-oniguruma-wasm/release\" \"out/utils/oniguruma/*\"",
+		"copy_files": "xcopy /e/h/y/q \"src/commands/syntaxes\" \"out/commands/syntaxes/*\""
 	},
 	"devDependencies": {
 		"@types/mocha": "^10.0.9",
