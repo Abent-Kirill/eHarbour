@@ -7,7 +7,7 @@
 	"version": "0.0.19",
 	"pricing": "Free",
 	"engines": {
-		"vscode": "^1.84.0"
+		"vscode": "^1.95.0"
 	},
 	"sponsor": {
 		"url": "https://tracker.vitaexpress.ru/retail-solutions/clipper-kassa"
@@ -22,19 +22,28 @@
 	"main": "./out/extension.js",
 	"contributes": {
 		"configuration": {
-			"title": "eharbour",
+			"title": "eHarbour",
 			"properties": {
-				"eharbour.proceduresname": {
+				"eHarbour.proceduresName": {
 					"type": "array",
 					"default": null,
-					"description": "Standart procs name"
+					"description": "Standard procedure name"
 				}
 			}
 		},
+		"keybindings": [
+			{
+				"command": "eHarbour.format",
+				"key": "ctrl+alt+f",
+				"when": "editorTextFocus"
+			}
+		],
 		"commands": [
 			{
-				"command": "eharbour.format",
-				"title": "Harbour format"
+				"command": "eHarbour.format",
+				"title": "Harbour format",
+				"category": "format",
+				"shortTitle": "HFormat"
 			}
 		]
 	},
@@ -45,23 +54,25 @@
 		"pretest": "npm run compile && npm run lint",
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js",
-		"copy_wasm": "xcopy /e/h/y/q \"node_modules/vscode-oniguruma-wasm/release\" \"out/oniguruma/*\"",
-		"copy_files": "xcopy /e/h/y/q \"syntaxes\" \"out/syntaxes/*\""
+		"copy_wasm": "xcopy /e/h/y/q \"node_modules/vscode-oniguruma-wasm/release\" \"out/utils/oniguruma/*\"",
+		"copy_files": "xcopy /e/h/y/q \"src/commands/syntaxes\" \"out/commands/syntaxes/*\""
 	},
 	"devDependencies": {
-		"@types/mocha": "^10.0.3",
-		"@types/node": "18.x",
+		"@types/mocha": "^10.0.9",
+		"@types/node": "*",
 		"@types/vscode": "^1.95.0",
-		"@typescript-eslint/eslint-plugin": "^6.9.0",
-		"@typescript-eslint/parser": "^6.9.0",
-		"@vscode/test-electron": "^2.3.6",
-		"eslint": "^8.52.0",
-		"glob": "^10.3.10",
-		"mocha": "^10.2.0",
-		"typescript": "^5.2.2"
+		"@typescript-eslint/eslint-plugin": "*",
+		"@typescript-eslint/parser": "*",
+		"@vscode/test-electron": "^2.4.1",
+		"eslint": "^9.15.0",
+		"glob": "^11.0.0",
+		"mocha": "^10.8.2",
+		"typescript": "*"
 	},
 	"dependencies": {
+		"@eslint/config-array": "^0.19.0",
+		"@eslint/object-schema": "^2.1.4",
 		"vscode-oniguruma-wasm": "^1.1.0",
-		"vscode-textmate": "^9.0.0"
+		"vscode-textmate": "^9.1.0"
 	}
 }

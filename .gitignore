@@ -40,3 +40,6 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+eharbour/node_modules/*
+eharbour/out
+eharbour/eharbour-0.0.19.vsix

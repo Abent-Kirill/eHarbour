@@ -2,10 +2,10 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Launch Extension",
+			"name": "Test Extention",
 			"type": "node",
 			"request": "launch",
-			"runtimeExecutable": "code", // Замените на путь к вашему VS Code, если нужно
+			"runtimeExecutable": "code",
 			"args": [
 				"--extensionDevelopmentPath=${workspaceFolder}",
 				"--disable-extensions"
