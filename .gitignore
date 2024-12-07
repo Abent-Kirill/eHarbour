@@ -42,4 +42,4 @@ testem.log
 Thumbs.db
 eharbour/node_modules/*
 eharbour/out
-eharbour/eharbour-0.0.19.vsix
+*.vsix

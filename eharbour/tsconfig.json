@@ -1,0 +1,30 @@
+{
+	"compilerOptions": {
+		"target": "ES2020", // Совместимость с современными версиями JavaScript
+		"module": "CommonJS", // Использование современных ES-модулей
+		"moduleResolution": "node", // Разрешение модулей через Node.js
+		"esModuleInterop": true, // Совместимость с CommonJS и ES модулями
+		"skipLibCheck": true, // Пропуск проверки типов в библиотеках для ускорения компиляции
+		"strict": true, // Включение строгой проверки типов
+		"resolveJsonModule": true, // Поддержка импорта JSON файлов
+		"outDir": "./out", // Папка для собранных файлов
+		"rootDir": "./src", // Основная папка с исходным кодом
+		"declaration": true, // Генерация файлов с типами (.d.ts)
+		"sourceMap": true, // Генерация исходных карт
+		"lib": ["ESNext"], // Использование библиотек для работы с браузером и современными функциями
+		"allowJs": true, // Разрешить использование JavaScript файлов в проекте
+		"noImplicitAny": true, // Отключение типа `any` по умолчанию
+		"noUnusedLocals": false, // Ошибка при наличии неиспользуемых переменных
+		"noUnusedParameters": false // Ошибка при наличии неиспользуемых параметров в функциях
+	},
+	"include": [
+		"src/**/*.ts", // Включение всех TypeScript файлов в папке src
+		"src/**/*.tsx", // Включение файлов TypeScript с JSX
+		"vite.config.ts"
+	],
+	"exclude": [
+		"node_modules", // Исключение node_modules
+		"out", // Исключение папки для собранных файлов
+		"vite.config.ts" // Исключение тестов для vscode
+	]
+}
